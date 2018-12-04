@@ -136,9 +136,59 @@
            时间，优先回收垃圾最多的区域。
          
          8.垃圾收集器参数总结
+              参数                                              描述
+           UseSerialGC
+           UseParNewGC
+           UseConcMarkSweepGC
+           UseParallelGC
+           UseParallelOldGC
+           SurvivorRatio
+           PretenureSizeThreshold
+           MaxTenuringThreshold
+           UseAdaptiveSizePolicy
+           HandlePromotionFailure
+           ParallelGCThreads
+           GCTimeRatio
+           MaxGCPauseMillis
+           CMSinitiatingOccupancyFraction
+           UseCMSCompactAtFullCollection
+           CMSFullGCBeforeCompaction
+           
+           
+           
          
          
       3.5 内存分配与回收策略
+         内存管理最终归为两类：分配对象给内存、回收分配给对象的内存。
+         
+         对象内存分配：通常是指在堆上分配。对象主要分配在新生代的Eden区上，如果启动了本地线程分配缓冲，将按线程优先在TLAB上分配。
+         
+         * 3.5.1 对象优先在Eden分配
+            大多数情况下，对象在新生代Eden区中分配。当Eden区没有足够的空间进行分配时，虚拟机将发起一次Minor GC
+            
+            新生代GC（Minor GC）：指发生在新生代的垃圾回收动作，因为Java对象大多都具有朝生夕死的特性，所以Minor GC非常频繁，一般回收速度也比较快。
+            
+            老年代GC（Major GC/Full GC）：指发生在老年代的GC，出现了Major GC，经常会伴随至少一次的Minor GC（但非绝对，在ParallelScavenge收集器
+            的收集策略里就有直接进行Major GC的策略选择过程）。Major GC的速度一般会比Minor GC慢十倍以上。
+            
+         * 3.5.2 大对象直接进入老年代
+            大对象对虚拟机的内存分配不友好。（更坏情况是遇到一群朝生夕死的短命大对象），经常出现大对象很容易导致内存还有不少空间时就提前触发垃圾收集
+            以获取足够的连续空间来安置它们。
+            虚拟机中提供了一个-XX：PertenureSizeThreshold参数，令大于这个设置的对象直接在老年代中分配。这样做的目的是避免在Eden区及两个Survivor
+            区之间发生大量的内存拷贝。
+         
+         
+         * 3.5.3 长期存活的对象将进入老年代
+           虚拟机给每个对象定义一个对象年龄计数器。如果对象在Eden出生并经过第一次Minor GC仍然存活，并且能被Survivor容纳的话，将被移动到Survivor空间
+           中，并将年龄设为1.对象在Survivor区中每熬过一次Minor GC，年龄就增加1，当他的年龄增加到特定（默认15），将晋升到老年代中。对象晋升老年代的
+           阈值可以通过参数-XX：MaxTenuringThreshold来设置。
+         
+         * 3.5.4 动态对象年龄判定
+         
+         
+         * 3.5.5空间分配担保
+           
+         
 
 
 

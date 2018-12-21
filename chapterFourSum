@@ -38,15 +38,45 @@
           
       
       4.2.5 jhat：虚拟机堆转储快照分析工具
-      
+          Sun JDK提供jhat与jmap搭配使用，用于分析jmap生成的堆转储快照。jhat内置了微型HTTP/HTML服务器，生成dump文件可以直接在浏览器中查看。
+          
       4.2.6 jstack：Java堆跟踪工具
-      
-     
+          jstack用于生产虚拟机当前时刻的线程快照。线程快照，即当前虚拟机每条线程正在执行的方法堆栈的集合，来定位线程出现长时间停顿的原因，如线程死锁、
+          死循环、请求外部资源导致长时间等待等。
+          jstack 命令格式：
+          jstack [ option ] vmid
+          
+          
      4.3 JDK可视化工具
      
       4.3.1 JConsole: Java监视与管理控制台
+          JConsole是在JDK1.5时期提供的虚拟机监控工具。
+          1.启动：
+               JConsole是一款基于JMX的可视化监视和管理工具，双击其中进程即可以监控。
+          2.内存监控：
+               内存页签相当于可视化jstat命令，用于监视收集器管理的虚拟机内存的变化趋势。
+               运行设置虚拟机参数：-Xms100m -Xmx100m -XX：+UseSerialGC
+               运行代码：
+               
+               思考：
+                    1.虚拟机启动参数只限制了Java堆为100MB，没有指定-Xmn参数，能否从监控中估计新生代有多大？
+                     注：Eden与Survivor空间默认比例默认为8：1，即可计算出
+                    2.执行了System.gc（）之后，老年代并没有回收，怎样回收？
+                     注：System.gc()在方法中，对应局部变量仍在作用域内，移出即可。
+          
       
       4.3.2 VisualIVM:多合一故障处理工具
-      
-      
+          VisualVM是目前为止，随JDK发布的功能最强大的运行监视和故障处理程序。
+               1.VisualVM兼容范围与插件安装；
+               2.生成和浏览堆转储快照，生成dump两种方式：
+               3.分析性能
+               4.BTrace动态日志跟踪
+               
      4.4 小结
+          除了JDK自带工具外，还有许多处理故障工具，非Hotspot，需要对应工具，如：
+          IBM：Support Assisant、Heap Analyzer、Javacore Analyzer
+          HP：HPjmeter、HPjtune
+          Eclipse：Memory Analyzer Tool
+          
+          
+          

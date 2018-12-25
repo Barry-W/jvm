@@ -43,6 +43,16 @@
         解决方式：Direct Memory通过-XX：MaxDirectMemorySize调整大小，内存不足时抛出OutOfMemoryError或OutOfMemoryError：Direct buffer memory
       
       5.2.4 外部命令导致系统缓慢
+        
+        现象：数字校园应用系统，CPU使用率很高，且绝大多数CPU资源的程序非应用本身。
+        
+        结果：fork系统调用，产生新进程
+        
+        分析：每个用户请求处理都需执行一个外部shell脚本来获得系统信息。执行shell脚本通过Java中Runtime.getRuntime().exec()方法调用。该方法可以实现
+        调用，但所耗资源过多。Java虚拟机执行的过程：克隆和当前相同环境变量的进程，再用新的进程去执行外部命令，最后退出进程。频繁操作，系统消耗很大。
+        
+        解决方式：去掉shell脚本执行语句，改为使用Java的API获取信息。
+        
       
       5.2.5 服务器JVM进程崩溃
       

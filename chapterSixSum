@@ -43,7 +43,17 @@
   字段修饰符放在access_flags项目中。
   跟随access_flags标志的是两项索引值：name_index和descriptor_index，分别表示字段的简单名称及字段和方法的描述符。
   
-  方法表集合
+  属性表集合
+    1.code属性
+    2.Exceptions属性
+    3.LineNumberTable属性
+    4.LocalVariableTable属性
+    5.SourceFile属性
+    6.ConstantValue属性
+    7.InnerClasses属性
+    8.Deprecated及Synthetic属性
+    
+    
   
 
 
